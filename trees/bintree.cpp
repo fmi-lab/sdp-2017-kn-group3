@@ -4,6 +4,7 @@
 
 #include <iostream>
 #include <vector>
+#include <string>
 
 /**
  * Builds on the Binary Tree implementation from lectures that can be found at
@@ -249,6 +250,59 @@ public:
       std::vector<T> result;
       rootLeftRight(rootptr, result);
       return result;
+  }
+
+  void insert(const T& x, std::string path) {
+      BTN* current = rootptr;
+      for (int i = 0; i < path.length() - 1; i++) {
+        char direction = path[i];
+        if (direction == 'L' && current->left) {
+            current = current->left;
+        } else if (direction == 'R' && current->right) {
+            current = current->right;
+        } else {
+            // error - bad path
+            return;
+        }
+      }
+    // current is the parent of the new node
+    if (path[path.length() - 1] == 'L' && current->left == nullptr) {
+        current->left = new BTN(x);
+    } else if (path[path.length() -  1] == 'R' && current->right == nullptr) {
+        current->right = new BTN(x);
+    }
+  }
+  void insertWithPos(const T& x, std::string path) {
+      P current = rootpos();
+      for (int i = 0; i < path.length(); i++) {
+        char direction = path[i];
+        if (direction == 'L') {
+            --current;
+        } else if (direction == 'R') {
+            ++current;
+        } else {
+            // error - bad path
+            return;
+        }
+      }
+      assignFrom(current, P(BinTree<T>(x)));
+  }
+
+  bool isBST(P position,
+         const T& min = T(),
+         const T& max = T(),
+         bool isOpenLeft = true,
+          bool isOpenRight = true) {
+      if (!position) { // node == nullptr
+        return true;
+      }
+      if ((!isOpenLeft && *position < min) ||
+      (!isOpenRight && *position > max)) {
+          return false;
+      }
+      return isBST(--position, min, *position, isOpenLeft, false) &&
+             isBST(++position, *position, max, false, isOpenRight);
+
   }
 };
 
