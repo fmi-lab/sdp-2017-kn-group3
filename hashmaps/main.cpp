@@ -51,6 +51,7 @@ int main()
        "cas1tle",
        "te1st"
     };
+    map1.ensureCapacity(106);
     for (int i = 0; i < 16; i++) {
         string word = words[i];
         map1.add(word, "val");
@@ -61,5 +62,10 @@ int main()
     cout << "map1 efficiency: " << map1.efficiency() << endl;
     cout << "map2 efficiency: " << map2.efficiency() << endl;
     cout << "map3 efficiency: " << map3.efficiency() << endl;
+
+    for (auto& entry: map1) {
+        map1[entry.key()] = "val2";
+        cout << entry.key() << " " << entry.value() << endl;
+    }
     return 0;
 }
